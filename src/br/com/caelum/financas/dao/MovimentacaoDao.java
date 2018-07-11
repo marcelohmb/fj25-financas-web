@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.com.caelum.financas.exception.ValorInvalidoException;
@@ -17,7 +17,7 @@ import br.com.caelum.financas.modelo.ValorPorMesEAno;
 @Stateless
 public class MovimentacaoDao {
 
-	@PersistenceContext
+	@Inject //@PersistenceContext
 	EntityManager manager;
 
 	public void adiciona(Movimentacao movimentacao) {
@@ -34,6 +34,10 @@ public class MovimentacaoDao {
 
 	public List<Movimentacao> lista() {
 		return this.manager.createQuery("select m from Movimentacao m", Movimentacao.class).getResultList();
+	}
+	
+	public List<Movimentacao> listaComCategorias() {
+		return this.manager.createQuery("select distinct m from Movimentacao m left join fetch m.categorias", Movimentacao.class).getResultList();
 	}
 
 	public void remove(Movimentacao movimentacao) {

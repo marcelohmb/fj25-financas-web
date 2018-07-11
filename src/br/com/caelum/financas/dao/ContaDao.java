@@ -7,8 +7,8 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
 import br.com.caelum.financas.modelo.Conta;
@@ -20,7 +20,7 @@ public class ContaDao {
 	@Resource
 	private UserTransaction ut;
 	
-	@PersistenceContext
+	@Inject //@PersistenceContext
 	EntityManager manager;
 	
 
