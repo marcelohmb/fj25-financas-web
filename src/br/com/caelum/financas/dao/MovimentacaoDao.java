@@ -21,6 +21,7 @@ public class MovimentacaoDao {
 	EntityManager manager;
 
 	public void adiciona(Movimentacao movimentacao) {
+		this.manager.joinTransaction();
 		this.manager.persist(movimentacao);
 		
 		if (movimentacao.getValor().compareTo(BigDecimal.ZERO)<0) {
@@ -42,6 +43,7 @@ public class MovimentacaoDao {
 
 	public void remove(Movimentacao movimentacao) {
 		Movimentacao movimentacaoParaRemover = this.manager.find(Movimentacao.class, movimentacao.getId());
+		this.manager.joinTransaction();
 		this.manager.remove(movimentacaoParaRemover);
 	}
 	
@@ -59,6 +61,8 @@ public class MovimentacaoDao {
 		TypedQuery<Movimentacao> query = this.manager.createQuery(jpql,Movimentacao.class);
 		query.setParameter("valor", valor);
 		query.setParameter("tipo", tipo);
+		
+		query.setHint("org.hibernate.cacheable", "true");
 		return query.getResultList();
 	}
 

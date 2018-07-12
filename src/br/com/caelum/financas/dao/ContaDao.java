@@ -32,6 +32,7 @@ public class ContaDao {
 			throw new EJBException(e);
 		}
 		
+		this.manager.joinTransaction();
 		this.manager.persist(conta);
 		
 		try {
@@ -57,6 +58,7 @@ public class ContaDao {
 
 	public void remove(Conta conta) {
 		Conta contaParaRemover = this.manager.find(Conta.class, conta.getId());
+		this.manager.joinTransaction();
 		this.manager.remove(contaParaRemover);
 	}
 
