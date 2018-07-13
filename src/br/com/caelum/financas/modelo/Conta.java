@@ -4,25 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Cacheable
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"agencia", "numero"})})
 public class Conta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@NotNull
+	@Pattern(regexp="[A-Z].*")
 	private String titular;
 	private String agencia;
 	private String numero;
+	
+	@Column(length=20, nullable=false)
+	@Size(min=3, max=20)
 	private String banco;
 	
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
