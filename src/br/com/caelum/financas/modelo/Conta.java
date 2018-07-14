@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -19,9 +21,12 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import br.com.caelum.financas.validator.NumeroEAgencia;
+
 @Entity
 @Cacheable
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"agencia", "numero"})})
+@NumeroEAgencia
 public class Conta {
 
 	@Id
@@ -41,6 +46,19 @@ public class Conta {
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OneToMany(mappedBy="conta")
 	private List<Movimentacao> movimentacoes = new ArrayList<Movimentacao>();
+	
+	
+	@OneToOne
+	@JoinColumn(unique=true)
+	private Gerente gerente;
+
+	public Gerente getGerente() {
+		return gerente;
+	}
+
+	public void setGerente(Gerente gerente) {
+		this.gerente = gerente;
+	}
 
 	public List<Movimentacao> getMovimentacoes() {
 		return movimentacoes;
